@@ -1,9 +1,15 @@
 #快速构建node项目
 
-分13步： 
-# 1.全局安装express
+## github地址 
+	- https://github.com/haoyongliang/quickly-create-node-project.git
 
+## 步骤
+
+### 1.全局安装express
+
+```bash
 npm install -g express
+```
 
 # 2.全局安装express-generator
 
@@ -14,15 +20,16 @@ npm install -g express-generator
 cd [工程父目录名]
 # 4.快速创建工程结构
 
-express -t [模板引擎名：ejs/jade] [工程名]   我一般是用express -e mypro
+- express -t [模板引擎名：ejs/jade] [工程名]   
+- 我一般是用express -e mypro
 
 # 5.替换ejs,修改package.json,将里面的ejs删除
 
 # 6.下载node_modules  ,执行命令 node install
 
-# 7.安装nunjucks,执行命令 npm install --save nunjucks
+# 7. 安装nunjucks,执行命令 npm install --save nunjucks
 
-# 8.模板引擎和模板的修改
+# 8. 模板引擎和模板的修改
 
 1. 替换app.js中的模板引擎，将ejs修改为nunjucks
 
@@ -40,8 +47,14 @@ env.express(app)
 	- 将文件后缀ejs修改为html
 	- 将模板文件里面的<%= xx %>替换成{{  xxx}}
 
-# 10.修改app.js,routes/index.js
-    将其中的render("xxx")加后缀修改成render("xxx.html")
+3. 修改涉及到模板渲染的js:app.js,router/index.js
+	- 将其中的render("xxx")加后缀修改成render("xxx.html")
+
+
+# 9. 修改路由
+
+
+
 
 # 11.在app.js同级目录添加config.js
 
