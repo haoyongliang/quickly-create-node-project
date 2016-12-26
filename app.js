@@ -30,7 +30,7 @@ app.use(logger('dev'));
 将解析到的post请求体作为一个对象挂在给req.body
 就可以通过req.body.表单属性名 获取值
  */
-app.use(bodyParser.json());
+app.use(bodyParser.json());//以JSON格式提交表单是HTML5中一种很新的规范
 app.use(bodyParser.urlencoded({ extended: false }));
 
 //配置cookie解析器
