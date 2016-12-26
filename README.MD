@@ -175,9 +175,9 @@ trim_trailing_whitespace = false
 ```
 
 ### 使用github托管
-新建.gitignore文件，将不需要托管的文件或文件夹添加进去
-git init 
-git add .
-git commit -m "第一次代码提交"
-git remote add origin gitUrl
-git push origin master
+- 新建.gitignore文件，将不需要托管的文件或文件夹添加进去
+- git init 
+- git add .
+- git commit -m "第一次代码提交"
+- git remote add origin gitUrl
+- git push origin master
