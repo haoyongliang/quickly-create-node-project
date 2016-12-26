@@ -1,9 +1,9 @@
 {
-  "name": "myprj",
+  "name": "quickly-create-node-project",
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "supervisor ./bin/www"
   },
   "dependencies": {
     "art-template": "^3.0.3",
@@ -14,6 +14,7 @@
     "morgan": "~1.7.0",
     "mysql": "^2.12.0",
     "nunjucks": "^3.0.0",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "supervisor": "^0.12.0"
   }
 }

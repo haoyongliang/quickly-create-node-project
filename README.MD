@@ -1,9 +1,9 @@
-#快速构建node项目
+#构建node项目
 
 ## github地址 
 	https://github.com/haoyongliang/quickly-create-node-project.git
 
-## 步骤
+## 创建最基本的node项目
 
 ### 1.全局安装express
 
@@ -55,18 +55,30 @@ npm install --save supervisor
 npm install --save nunjucks
 ```
 
-2. 替换app.js中的模板引擎，将ejs修改为nunjucks
+2. 在项目根目录添加config.js,内容如下
+```bash
+var path = require('path')
+
+module.exports = {
+  viewPath: path.join(__dirname, 'views')
+}
+
+```
+
+3. 替换app.js中的模板引擎，将ejs修改为nunjucks
 
 ```javascript
 var nunjucks = require('art-template');
 // 配置使用 NunJucks 模板引擎
-const env = nunjucks.configure(path.join(__dirname, 'views'), {
-  noCache: true
+nunjucks.configure(config.viewPath, {
+  autoescape: true,
+  express: app,
+  watch: true,
+  noCache: false
 })
-env.express(app)
 ```
 
-3. 修改模板文件
+4. 修改模板文件
 	- 找到文件：views/index.ejs, views/error.ejs
 	- 将文件后缀ejs修改为html
 	- 将模板文件里面的<%= xx %>替换成{{  xxx}}
@@ -127,15 +139,45 @@ module.exports = router;
 ```
 
 
-### 10.在app.js同级目录添加config.js
-
-```javascript
-var path = require('path')
-module.exports = {
-}
-```
-
 ### 10. 测试是否可以正常运行      
 
 访问 http://localhost:3000/users/add 
 
+## 升级node项目：代码规范，托管
+
+### 1. 添加代码规范
+项目根目录新建文件.editorconfig,内容如下
+
+```bash
+\# http://editorconfig.org
+
+root = true
+
+\# 对所有文件生效 
+[*] 
+charset = utf-8 
+\# 缩进类型 可选值，space，tab 
+indent_style = space
+
+\# 缩进数量 
+indent_size = 2
+
+\# 换行符格式 
+end_of_line = lf
+
+\# 是否在最后一行添加换行 
+insert_final_newline = true 
+trim_trailing_whitespace = true
+
+\# 对后缀名为 md 的文件生效 
+[*.md] 
+trim_trailing_whitespace = false
+```
+
+### 使用github托管
+新建.gitignore文件，将不需要托管的文件或文件夹添加进去
+git init 
+git add .
+git commit -m "第一次代码提交"
+git remote add origin gitUrl
+git push origin master

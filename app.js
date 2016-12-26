@@ -13,10 +13,12 @@ var config = require('./config');
 var app = express();
 
 // 配置 NunJucks 模板引擎
-const env = nunjucks.configure(config.viewPath, {
-  noCache: true
+nunjucks.configure(config.viewPath, {
+  autoescape: true,
+  express: app,
+  watch: true,
+  noCache: false
 })
-env.express(app)
 
 //配置网站favicon.ico图标,所在目录/public/images/favicon.ico
 //app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
@@ -30,16 +32,16 @@ app.use(logger('dev'));
 将解析到的post请求体作为一个对象挂在给req.body
 就可以通过req.body.表单属性名 获取值
  */
-app.use(bodyParser.json());//以JSON格式提交表单是HTML5中一种很新的规范
+app.use(bodyParser.json());//以JSON格式提s交表单是HTML5中一种很新的规范
 app.use(bodyParser.urlencoded({ extended: false }));
 
 //配置cookie解析器
 app.use(cookieParser());
 
 //配置静态资源目录
-app.use(express.static('/public',path.join(__dirname, 'public')));
-app.use(express.static('/node_module',path.join(__dirname, 'node_module')));
-app.use(express.static('/static',path.join(__dirname, 'static')));
+app.use('/public',express.static(path.join(__dirname, 'public')));
+app.use('/node_modules',express.static(path.join(__dirname, 'node_modules')));
+app.use('/static',express.static(path.join(__dirname, 'static')));
 
 //配置路由
 app.use('/', index);
