@@ -23,6 +23,7 @@ express -t [模板引擎名：ejs/jade] [工程名]   我一般是用express -e 
 # 7.安装nunjucks,执行命令 npm install --save nunjucks
 
 # 8.模板引擎和模板的修改
+
 	1. 替换app.js中的模板引擎，将ejs修改为nunjucks
 
 		```javascript
@@ -33,6 +34,7 @@ express -t [模板引擎名：ejs/jade] [工程名]   我一般是用express -e 
 		})
 		env.express(app)
 		```
+		
 	2. 修改模板文件
 		- 找到文件：views/index.ejs, views/error.ejs
 		- 将文件后缀ejs修改为html
