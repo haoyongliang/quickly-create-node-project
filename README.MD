@@ -19,20 +19,24 @@ express -t [模板引擎名：ejs/jade] [工程名]   我一般是用express -e 
 # 5.替换ejs,修改package.json,将里面的ejs删除
 
 # 6.下载node_modules  ,执行命令 node install
+
 # 7.安装nunjucks,执行命令 npm install --save nunjucks
-# 8.修改app.js,替换其中的模板引擎
 
-```javascript
-var nunjucks = require('art-template');
-// 配置使用 NunJucks 模板引擎
-const env = nunjucks.configure(path.join(__dirname, 'views'), {
-  noCache: true
-})
-env.express(app)
-```
+# 8.模板引擎和模板的修改
+	1. 替换app.js中的模板引擎，将ejs修改为nunjucks
 
-# 9.修改views/index.ejs, views/error.efs ==>index.html,error.html
-    将里面的<%= xx %>替换成{{  xxx}}
+		```javascript
+		var nunjucks = require('art-template');
+		// 配置使用 NunJucks 模板引擎
+		const env = nunjucks.configure(path.join(__dirname, 'views'), {
+		  noCache: true
+		})
+		env.express(app)
+		```
+	2. 修改模板文件
+		- 找到文件：views/index.ejs, views/error.ejs
+		- 将文件后缀ejs修改为html
+		- 将模板文件里面的<%= xx %>替换成{{  xxx}}
 
 # 10.修改app.js,routes/index.js
     将其中的render("xxx")加后缀修改成render("xxx.html")
