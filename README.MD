@@ -1,7 +1,7 @@
 #快速构建node项目
 
 ## github地址 
-	- https://github.com/haoyongliang/quickly-create-node-project.git
+	https://github.com/haoyongliang/quickly-create-node-project.git
 
 ## 步骤
 
@@ -11,27 +11,51 @@
 npm install -g express
 ```
 
-# 2.全局安装express-generator
+### 2.全局安装express-generator
 
+```bash
 npm install -g express-generator
-(此时可以测试一下，输入express - -help) 
-# 3.进入到·工程父目录
+```
+(输入express --help 测试是否安装成功) 
 
+### 3.进入到工程父目录
+
+```bash
 cd [工程父目录名]
-# 4.快速创建工程结构
+```
 
-- express -t [模板引擎名：ejs/jade] [工程名]   
-- 我一般是用express -e mypro
+### 4.快速创建工程结构
 
-# 5.替换ejs,修改package.json,将里面的ejs删除
+```javascript
+express -t [模板引擎名：ejs/jade] [工程名]   
+```
+我一般是用express -e mypro
 
-# 6.下载node_modules  ,执行命令 node install
+### 5.修改package.json,将里面的ejs依赖删除
 
-# 7. 安装nunjucks,执行命令 npm install --save nunjucks
+### 6.安装node_modules
 
-# 8. 模板引擎和模板的修改
+	执行命令 node install 
+	或者执行 npm install--production,只安装dependencies,不安装devdependencies
 
-1. 替换app.js中的模板引擎，将ejs修改为nunjucks
+### 7. 安装supervisor
+
+项目代码修改或者down机需要重启服务器，我们使用supervisor
+```bash
+npm install --save supervisor
+```
+修改package.json
+```bash
+"start": "supervisor ./bin/www"
+```
+### 8. 模板引擎和模板的修改
+
+1. 安装nunjucks模板引擎
+```bash
+npm install --save nunjucks
+```
+
+2. 替换app.js中的模板引擎，将ejs修改为nunjucks
 
 ```javascript
 var nunjucks = require('art-template');
@@ -42,39 +66,25 @@ const env = nunjucks.configure(path.join(__dirname, 'views'), {
 env.express(app)
 ```
 
-2. 修改模板文件
+3. 修改模板文件
 	- 找到文件：views/index.ejs, views/error.ejs
 	- 将文件后缀ejs修改为html
 	- 将模板文件里面的<%= xx %>替换成{{  xxx}}
 
-3. 修改涉及到模板渲染的js:app.js,router/index.js
+4. 修改涉及到模板渲染的js:app.js,router/index.js
 	- 将其中的render("xxx")加后缀修改成render("xxx.html")
 
 
-# 9. 修改路由
+### 9. 修改路由
+1. 在项目根目录(app.js所在目录)添加controllers目录，并在目录下添加index.js,用于存放路由的具体业务逻辑
 
-
-
-
-# 11.在app.js同级目录添加config.js
-
-```javascript
-var path = require('path')
-module.exports = {
-}
-```
-
-# 12.在app.js 
-
-同级目录添加controllers目录,并在目录下添加index.js,用于存放路由的具体业务逻辑
-    
 ```javascript    
 module.exports.homePage = (req, res, next) => { 
 	res.render('index.html',{title:'Express'});
 }
 ```
 
-# 13.修改routes/indexs.js路由
+2. 修改routes/indexs.js路由，引用controllers/index.js
 
 ```javascript
 var express = require('express');
@@ -85,23 +95,47 @@ router.get('/', handler.homePage);
 module.exports = router;
 ```
 
-# 14.正式开发,在routes目录下有个user.js路由,我们每次访问该网址应该是 http://localhost:3000/user,所以route.use('/user',..)在该js中出现多次
 
-修改app.js
+3. 去掉路由中的重复路径
+在routes目录下有个user.js路由，该路由的配置信息可能是
+```javascript
+route.use('/user/add', xxxHandler);
+route.use('/user/edit', xxxHandler);
+```
+
+通过观察发现，每行都有'/user' 比较麻烦，为了简化配置
+我们需要修改路由
+1. 在app.js中添加如下信息
+
 ```javascript
 var user = require('./routes/user');
 // 挂载用户路由
 // 加上前缀，这样的话，user 中的路由就都必须是以 /user开头才行
 app.use('/user',user);
+```
 
-修改routes/user.js
+2. 修改routes/user.js
+
+```javascript
 var express = require('express');
 var router = express.Router();
-/* GET users listing. */
-router.get('/add', function(req, res, next) {
+route.use('/add', xxxHandler);
+route.use('/edit', function(req, res, next) {
   res.send('add student');
 });
 module.exports = router;
-```              
+```
+
+
+### 10.在app.js同级目录添加config.js
+
+```javascript
+var path = require('path')
+module.exports = {
+}
+```
+
+### 10. 测试是否可以正常运行      
+
 访问 http://localhost:3000/users/add
 
