@@ -149,27 +149,27 @@ module.exports = router;
 项目根目录新建文件.editorconfig,内容如下
 
 ```bash
-\# http://editorconfig.org
+# http://editorconfig.org
 
 root = true
 
-\# 对所有文件生效 
+# 对所有文件生效 
 [*] 
 charset = utf-8 
-\# 缩进类型 可选值，space，tab 
+# 缩进类型 可选值，space，tab 
 indent_style = space
 
-\# 缩进数量 
+# 缩进数量 
 indent_size = 2
 
-\# 换行符格式 
+# 换行符格式 
 end_of_line = lf
 
-\# 是否在最后一行添加换行 
+# 是否在最后一行添加换行 
 insert_final_newline = true 
 trim_trailing_whitespace = true
 
-\# 对后缀名为 md 的文件生效 
+# 对后缀名为 md 的文件生效 
 [*.md] 
 trim_trailing_whitespace = false
 ```
