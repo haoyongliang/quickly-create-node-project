@@ -286,3 +286,14 @@ app.use('/public',express.static(config.publicPath));
 app.use('/node_modules',express.static(config.node_modulesPath));
 app.use('/static',express.static(config.staticPath));
 ```
+
+### 11.使用ES6语法更新js代码
++ 常用的语法有
+  - var http = require('http') --> import http from 'http';//全部导入
+  - var path = require('path') --> import { join } from 'path';//导入指定方法
+  - var myModel = require('./myModel') --> import * as myModel from './myModel';//导入自定义模块
+  - export function methodName(){}//在自定义模块中创建一个方法
+  - export default methodName/objName;//使用export default 命令
+  - 通过 const 定义常量
+  - 通过 let 定义变量
+  - 使用模板字符串

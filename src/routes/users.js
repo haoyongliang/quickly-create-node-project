@@ -1,9 +1,11 @@
-var express = require('express');
-var router = express.Router();
-var handler = require('../controllers/users');
+import  express from 'express';
+
+import  * as handler from '../controllers/users';
+
+const router = express.Router();
 
 /* GET users listing. */
 router.get('/add', handler.add);
 
-module.exports = router;
+export default router;
               

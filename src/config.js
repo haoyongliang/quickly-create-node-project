@@ -1,10 +1,10 @@
-var path = require('path')
+import { join } from 'path';
 
 module.exports = {
-  viewPath: path.join(__dirname, './../views'),
-  publicPath:path.join(__dirname,'./../public'),
-  staticPath:path.join(__dirname,'./../static'),
-  node_modulesPath:path.join(__dirname,'./../node_modules'),
+  viewPath: join(__dirname, './../views'),
+  publicPath:join(__dirname,'./../public'),
+  staticPath:join(__dirname,'./../static'),
+  node_modulesPath:join(__dirname,'./../node_modules'),
   DB_HOST:"127.0.0.1",
   DB_USER:"root",
   DB_PASSWORD:"root",

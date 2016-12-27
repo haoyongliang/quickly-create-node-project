@@ -1,16 +1,16 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var nunjucks = require('nunjucks');
+import express from 'express';
+import { join } from 'path';
+import favicon from 'serve-favicon';
+import logger from 'morgan';
+import cookieParser  from 'cookie-parser';
+import bodyParser from 'body-parser';
+import nunjucks from 'nunjucks';
 
-var index = require('./routes/index');
-var users = require('./routes/users');
-var config = require('./config');
+import index from './routes/index';
+import users from './routes/users';
+import config from './config';
 
-var app = express();
+const app = express();
 
 // 配置 NunJucks 模板引擎
 nunjucks.configure(config.viewPath, {
@@ -21,7 +21,7 @@ nunjucks.configure(config.viewPath, {
 })
 
 //配置网站favicon.ico图标,所在目录/public/images/favicon.ico
-//app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
+//app.use(favicon(join(__dirname, 'public', 'images', 'favicon.ico')));
 
 //配置日志
 app.use(logger('dev'));
