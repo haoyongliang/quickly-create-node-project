@@ -2,7 +2,7 @@
 
 ## github地址 
 	https://github.com/haoyongliang/quickly-create-node-project.git
-
+---
 ## 创建最基本的node项目
 
 ### 1.全局安装express
@@ -143,6 +143,7 @@ module.exports = router;
 
 访问 http://localhost:3000/users/add 
 
+---
 ## 升级node项目：代码规范，托管
 
 ### 1. 添加代码规范
@@ -184,3 +185,104 @@ trim_trailing_whitespace = false
 - git commit -m "第一次代码提交"
 - git remote add origin gitUrl
 - git push origin master
+
+---
+## 添加babel ES6转码器
+### 1.安装ES6转码规则
+```bash
+npm install --save-dev babel-preset-es2015
+```
+
+### 2.在项目根目录添加.babelrc配置文件，内容如下
+
+```bash
+  {
+    "presets": [
+      "es2015"
+    ],
+    "plugins": []
+  }
+```
+
+### 3.在项目中添加babel-cli工具，用于命令行转码
+注意：只能使用npm,别使用npm install 安装包依赖，会报丢失模块错误,如果要使用cnpm安装，请全局安装babel-cli工具(参见阮一峰ES6)
+
+```bash
+npm install --save-dev babel-cli
+```
+
+### 4.修改package.json
+
+```bash
+{
+  "devDependencies": {
+    "babel-cli": "^6.0.0"
+  },
+  "scripts": {
+    "build": "babel ./src -d ./dist"
+  },
+}
+```
+
+### 5.在项目跟目录新建src和dist目录，将bin,controllers,routers文件夹和app.js,config.js文件放入src目录,修改bin/www 添加后缀bin/www.js
+
+### 6.运行 命令进行转码,测试安装是否顺利
+
+```bash
+npm run build 
+```
+
+### 7.安装babel-register
+- 安装
+```bash
+npm install --save-dev babel-register
+```
+
+
+### 8.在项目根目录新建index.js,内容如下
+
+```bash
+require('babel-register')
+require('./src/bin/www')
+```
+
+### 9.配置package.json 中的scripts(执行命令)
+- "prebuild","prestart" 可以不配置，如果网非常差，前提node_module安装完美
+
+```bash
+    "prebuild": "npm install"
+    "build": "babel ./src -d ./dist",
+
+    "predev": "npm install",
+    "dev": "supervisor ./index",
+    
+    "prestart": "npm run build",
+    "start": "supervisor ./dist/bin/www"
+```
+- 开发环境
+  + npm install 安装依赖包
+  + npm run build 编译代码
+  + npm run dev 通过babel-register改写require命令
+
+- 生成环境
+  + npm install -production 安装依赖包
+  + npm run build 编译代码
+  + npm start 直接执行app.js不需要改写babel-register命令
+
+
+### 10.修改src/app.js src/config.js
+- 修改config.js代码如下
+
+```bash
+viewPath: path.join(__dirname, './../views'),
+publicPath:path.join(__dirname,'./../public'),
+staticPath:path.join(__dirname,'./../static'),
+node_modulesPath:path.join(__dirname,'./../node_modules'),
+```
+- 修改app.js中静态资源配置信息为
+
+```bash
+app.use('/public',express.static(config.publicPath));
+app.use('/node_modules',express.static(config.node_modulesPath));
+app.use('/static',express.static(config.staticPath));
+```
