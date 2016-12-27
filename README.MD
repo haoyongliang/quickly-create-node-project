@@ -187,12 +187,12 @@ trim_trailing_whitespace = false
 
 
 ### 添加babel ES6转码器
-1. 安装ES6转码规则
++ 1.安装ES6转码规则
 ```bash
 npm install --save-dev babel-preset-es2015
 ```
 
-2. 在项目根目录添加.babelrc配置文件，内容如下
++ 2.在项目根目录添加.babelrc配置文件，内容如下
 
 ```bash
   {
@@ -203,14 +203,14 @@ npm install --save-dev babel-preset-es2015
   }
 ```
 
-3. 在项目中添加babel-cli工具，用于命令行转码
++ 3.在项目中添加babel-cli工具，用于命令行转码
 注意：只能使用npm,别使用npm install 安装包依赖，会报丢失模块错误,如果要使用cnpm安装，请全局安装babel-cli工具(参见阮一峰ES6)
 
 ```bash
 npm install --save-dev babel-cli
 ```
 
-4. 修改package.json
++ 4.修改package.json
 
 ```bash
 {
@@ -223,29 +223,29 @@ npm install --save-dev babel-cli
 }
 ```
 
-5. 在项目跟目录新建src和dist目录，将bin,controllers,routers文件夹和app.js,config.js文件放入src目录,修改bin/www 添加后缀bin/www.js
++ 5.在项目跟目录新建src和dist目录，将bin,controllers,routers文件夹和app.js,config.js文件放入src目录,修改bin/www 添加后缀bin/www.js
 
-6. 运行 命令进行转码,测试安装是否顺利
++ 6.运行 命令进行转码,测试安装是否顺利
 
 ```bash
 npm run build 
 ```
 
-7. 安装babel-register
++ 7.安装babel-register
 - 安装
 ```bash
 npm install --save-dev babel-register
 ```
 
 
-8. 在项目根目录新建index.js,内容如下
++ 8.在项目根目录新建index.js,内容如下
 
 ```bash
 require('babel-register')
 require('./src/bin/www')
 ```
 
-9. 配置package.json 中的scripts(执行命令)
++ 9.配置package.json 中的scripts(执行命令)
 - "prebuild","prestart" 可以不配置，如果网非常差，前提node_module安装完美
 
 ```bash
@@ -269,7 +269,7 @@ require('./src/bin/www')
   + npm start 直接执行app.js不需要改写babel-register命令
 
 
-10. 修改src/app.js src/config.js
++ 10.修改src/app.js src/config.js
 - 修改config.js代码如下
 
 ```bash
