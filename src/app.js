@@ -39,9 +39,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 
 //配置静态资源目录
-app.use('/public',express.static(path.join(__dirname, 'public')));
-app.use('/node_modules',express.static(path.join(__dirname, 'node_modules')));
-app.use('/static',express.static(path.join(__dirname, 'static')));
+app.use('/public',express.static(config.publicPath));
+app.use('/node_modules',express.static(config.node_modulesPath));
+app.use('/static',express.static(config.staticPath));
 
 //配置路由
 app.use('/', index);
