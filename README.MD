@@ -40,7 +40,7 @@ express -t [模板引擎名：ejs/jade] [工程名]
 
 ### 7. 安装supervisor
 
-项目代码修改或者down机需要重启服务器，我们使用supervisor
+项目代码修改或者down机需要重启服务器，我使用的是supervisor，还可以用nodemon
 ```bash
 npm install --save supervisor
 ```
@@ -175,7 +175,10 @@ trim_trailing_whitespace = false
 ```
 
 ### 使用github托管
-- 新建.gitignore文件，将不需要托管的文件或文件夹添加进去
+- 新建.gitignore文件，将不需要托管的文件或文件夹添加进去，下面是我的配置信息
+	+ node_modules
+	+ .idea
+	+ dist
 - git init 
 - git add .
 - git commit -m "第一次代码提交"
