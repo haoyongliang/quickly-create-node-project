@@ -299,3 +299,41 @@ app.use('/static',express.static(config.staticPath));
   - 使用模板字符串
   - 通过class 定义类
   - 直接函数名(){..}定义函数，无需通过function关键字
+
+
+ ### 12.添加ORM框架--sequelize
+ + 安装 npm install sequelize
+ + 在config.js文件中添加数据库配置信息
+ ```bash
+  DB_HOST:"127.0.0.1",
+  DB_USER:"root",
+  DB_PASSWORD:"root",
+  DB_DATABASE:"itcast",
+  DB_PORT:"3306",
+  DB_DIALECT : "mysql"
+ ```
+ + 在src目录添加数据库工具sequelize.js
+ ```bash
+import Sequelize from "sequelize"
+import Config from './config'
+
+const sequelize = new Sequelize(Config.DB_DATABASE, Config.DB_USER, Config.DB_PASSWORD,{
+  host: Config.DB_HOST,
+  dialect: Config.DB_DIALECT
+});
+
+export default sequelize
+
+ ```
+ + 在src目录下新建mapper文件夹，存放ORM映射文件,比如
+ ```bash
+import sequelize from '../sequelize'
+import  Sequelize from 'sequelize'
+
+const User = sequelize.define('t_user',{
+  user_name: Sequelize.STRING,
+  user_password: Sequelize.STRING
+});
+```
+
+
