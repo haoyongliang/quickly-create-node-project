@@ -12,10 +12,10 @@ export default class User{
 	}
 
 	/*
-	 *静态方法 
+	 *静态方法
 	 */
-	staic find(){
-		
+  static find(){
+
 	}
 
 

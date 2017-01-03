@@ -3,11 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    
     "build": "babel ./src -d ./dist",
-   
     "dev": "supervisor ./index",
-
     "prestart": "npm run build",
     "start": "supervisor ./dist/bin/www"
   },
@@ -20,6 +17,7 @@
     "morgan": "~1.7.0",
     "mysql": "^2.12.0",
     "nunjucks": "^3.0.0",
+    "sequelize": "^3.28.0",
     "serve-favicon": "~2.3.0",
     "supervisor": "^0.12.0"
   },

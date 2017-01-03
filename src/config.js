@@ -1,6 +1,6 @@
 import { join } from 'path';
 
-module.exports = {
+export default   {
   viewPath: join(__dirname, './../views'),
   publicPath:join(__dirname,'./../public'),
   staticPath:join(__dirname,'./../static'),
@@ -9,5 +9,6 @@ module.exports = {
   DB_USER:"root",
   DB_PASSWORD:"root",
   DB_DATABASE:"itcast",
-  DB_PORT:"3306"
+  DB_PORT:"3306",
+  DB_DIALECT : "mysql"
 }

@@ -297,3 +297,5 @@ app.use('/static',express.static(config.staticPath));
   - 通过 const 定义常量
   - 通过 let 定义变量
   - 使用模板字符串
+  - 通过class 定义类
+  - 直接函数名(){..}定义函数，无需通过function关键字
