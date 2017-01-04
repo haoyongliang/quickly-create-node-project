@@ -269,8 +269,9 @@ require('./src/bin/www')
   + npm run build 编译代码
   + npm start 直接执行app.js不需要改写babel-register命令
 
-
-### 10.修改src/app.js src/config.js
+---
+## 扩展(如果有需要请继续)
+### 1.修改src/app.js src/config.js
 - 修改config.js代码如下
 
 ```bash
@@ -287,7 +288,7 @@ app.use('/node_modules',express.static(config.node_modulesPath));
 app.use('/static',express.static(config.staticPath));
 ```
 
-### 11.使用ES6语法更新js代码
+### 2.使用ES6语法更新js代码
 + 常用的语法有
   - var http = require('http') --> import http from 'http';//全部导入
   - var path = require('path') --> import { join } from 'path';//导入指定方法
@@ -301,7 +302,7 @@ app.use('/static',express.static(config.staticPath));
   - 直接函数名(){..}定义函数，无需通过function关键字
 
 
-### 12.添加ORM框架--sequelize
+### 3.添加ORM框架--sequelize
  + 安装 npm install sequelize
  + 在config.js文件中添加数据库配置信息
  ```bash
@@ -336,7 +337,7 @@ const User = sequelize.define('t_user',{
 });
 ```
 
-### 13.将代码修改成restful风格
+### 4.将代码修改成restful风格
 
 + 修改routes目录下的 JS文件，我修改users.js为例代码如下
 ```javascript
@@ -356,7 +357,7 @@ export default router;
 
 ```
 
-### 最后添加一些可能用到的npm包
+### 5.最后添加一些可能用到的npm包
 1. formidable 图片上传
 2. validator node后端表单校验
 3. open node程序启动完毕，自动打开浏览器
