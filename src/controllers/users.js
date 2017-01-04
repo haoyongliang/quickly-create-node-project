@@ -1,5 +1,25 @@
+import User from './../mapper/user'
 
-export function add(req, res, next){
-	console.log(req.url);
-	console.log(req.query.name);
+export default  {
+
+  getAllUsers: function (req, res, next) {
+    let data = []
+    User.findAll().then(function (result) {
+      for (var i = 0, usr; usr = result[i++];) {
+        data.push(usr);
+        console.log('nae=' + usr.user_name + ', password=' + usr.user_password);
+      }
+
+      res.json({
+        success:true,
+        result: {
+          list: data
+        }
+      });
+
+    }).then(function (err) {
+      throw   err
+    })
+
+  }
 }

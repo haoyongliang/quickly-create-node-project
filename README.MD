@@ -1,6 +1,6 @@
 #构建node项目
 
-## github地址 
+## github地址
 	https://github.com/haoyongliang/quickly-create-node-project.git
 ---
 ## 创建最基本的node项目
@@ -16,7 +16,7 @@ npm install -g express
 ```bash
 npm install -g express-generator
 ```
-(输入express --help 测试是否安装成功) 
+(输入express --help 测试是否安装成功)
 
 ### 3.进入到工程父目录
 
@@ -27,7 +27,7 @@ cd [工程父目录名]
 ### 4.快速创建工程结构
 
 ```javascript
-express -t [模板引擎名：ejs/jade] [工程名]   
+express -t [模板引擎名：ejs/jade] [工程名]
 ```
 我一般是用express -e mypro
 
@@ -35,7 +35,7 @@ express -t [模板引擎名：ejs/jade] [工程名]
 
 ### 6.安装node_modules
 
-	执行命令 node install 
+	执行命令 node install
 	或者执行 npm install--production,只安装dependencies,不安装devdependencies
 
 ### 7. 安装supervisor
@@ -90,8 +90,8 @@ nunjucks.configure(config.viewPath, {
 ### 9. 修改路由
 1. 在项目根目录(app.js所在目录)添加controllers目录，并在目录下添加index.js,用于存放路由的具体业务逻辑
 
-```javascript    
-module.exports.homePage = (req, res, next) => { 
+```javascript
+module.exports.homePage = (req, res, next) => {
 	res.render('index.html',{title:'Express'});
 }
 ```
@@ -139,9 +139,9 @@ module.exports = router;
 ```
 
 
-### 10. 测试是否可以正常运行      
+### 10. 测试是否可以正常运行
 
-访问 http://localhost:3000/users/add 
+访问 http://localhost:3000/users/add
 
 ---
 ## 升级node项目：代码规范，托管
@@ -154,24 +154,24 @@ module.exports = router;
 
 root = true
 
-# 对所有文件生效 
-[*] 
-charset = utf-8 
-# 缩进类型 可选值，space，tab 
+# 对所有文件生效
+[*]
+charset = utf-8
+# 缩进类型 可选值，space，tab
 indent_style = space
 
-# 缩进数量 
+# 缩进数量
 indent_size = 2
 
-# 换行符格式 
+# 换行符格式
 end_of_line = lf
 
-# 是否在最后一行添加换行 
-insert_final_newline = true 
+# 是否在最后一行添加换行
+insert_final_newline = true
 trim_trailing_whitespace = true
 
-# 对后缀名为 md 的文件生效 
-[*.md] 
+# 对后缀名为 md 的文件生效
+[*.md]
 trim_trailing_whitespace = false
 ```
 
@@ -180,7 +180,7 @@ trim_trailing_whitespace = false
 	+ node_modules
 	+ .idea
 	+ dist
-- git init 
+- git init
 - git add .
 - git commit -m "第一次代码提交"
 - git remote add origin gitUrl
@@ -229,7 +229,7 @@ npm install --save-dev babel-cli
 ### 6.运行 命令进行转码,测试安装是否顺利
 
 ```bash
-npm run build 
+npm run build
 ```
 
 ### 7.安装babel-register
@@ -255,7 +255,7 @@ require('./src/bin/www')
 
     "predev": "npm install",
     "dev": "supervisor ./index",
-    
+
     "prestart": "npm run build",
     "start": "supervisor ./dist/bin/www"
 ```
@@ -301,7 +301,7 @@ app.use('/static',express.static(config.staticPath));
   - 直接函数名(){..}定义函数，无需通过function关键字
 
 
- ### 12.添加ORM框架--sequelize
+### 12.添加ORM框架--sequelize
  + 安装 npm install sequelize
  + 在config.js文件中添加数据库配置信息
  ```bash
@@ -336,4 +336,33 @@ const User = sequelize.define('t_user',{
 });
 ```
 
+### 13.将代码修改成restful风格
+
++ 修改routes目录下的 JS文件，我修改users.js为例代码如下
+```javascript
+import  express from 'express';
+
+import  handler  from '../controllers/users';
+
+const router = express.Router();
+
+/* GET users listing. */
+router.get('/users', handler.getAllUsers);
+//router.post('/users/:id', handler.getAllUsers);
+//router.put('/users/:id', handler.getAllUsers);
+//router.delete('/user/:id', handler.getAllUsers);
+
+export default router;
+
+```
+
+### 最后添加一些可能用到的npm包
+1. formidable 图片上传
+2. validator node后端表单校验
+3. open node程序启动完毕，自动打开浏览器
+4. express-session
+5. http-proxy-middleware    express中间代理
+6. glob 文件搜索用到，可递归搜索
+7. moment.js 时间处理 moment().format();
+8. art-template
 

@@ -1,11 +1,13 @@
 import  express from 'express';
 
-import  * as handler from '../controllers/users';
+import  handler  from '../controllers/users';
 
 const router = express.Router();
 
 /* GET users listing. */
-router.get('/add', handler.add);
+router.get('/users', handler.getAllUsers);
+//router.post('/users/:id', handler.getAllUsers);
+//router.put('/users/:id', handler.getAllUsers);
+//router.delete('/user/:id', handler.getAllUsers);
 
 export default router;
-              

@@ -6,4 +6,6 @@ const User = sequelize.define('t_user',{
   user_password: Sequelize.STRING
 });
 
+export default  User
+
 

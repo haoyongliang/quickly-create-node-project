@@ -45,7 +45,7 @@ app.use('/static',express.static(config.staticPath));
 
 //配置路由
 app.use('/', index);
-app.use('/users', users);
+app.use('/api/users', users);
 
 //配置404页面
 app.use(function(req, res, next) {
