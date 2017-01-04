@@ -1,4 +1,4 @@
-import User from './../mapper/user'
+import User from '../mapper/user'
 
 export default  {
 

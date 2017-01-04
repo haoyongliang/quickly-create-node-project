@@ -54,7 +54,7 @@ app.use(function(req, res, next) {
   next(err);
 });
 
-//配置错误处理页面
+//配置错误处理中间件，以前错误直接throw err, 现在修改为next(err)即可
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;

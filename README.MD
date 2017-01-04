@@ -357,7 +357,12 @@ export default router;
 
 ```
 
-### 5.最后添加一些可能用到的npm包
+
+### 5.错误处理
++ 在app.js中已经添加了错误处理中间件，只需要再程序中修改代码即可
++ 以前错误直接throw err, 现在修改为next(err)即可
+
+### 6.最后添加一些可能用到的npm包
 1. formidable 图片上传
 2. validator node后端表单校验
 3. open node程序启动完毕，自动打开浏览器
