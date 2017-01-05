@@ -19,6 +19,7 @@ router.prefix = '/api/users';
 
 /* GET users listing. */
 router.get('/users', _users2.default.getAllUsers);
+router.get('/data', function (req, res, next) {});
 //router.post('/users/:id', handler.getAllUsers);
 //router.put('/users/:id', handler.getAllUsers);
 //router.delete('/user/:id', handler.getAllUsers);

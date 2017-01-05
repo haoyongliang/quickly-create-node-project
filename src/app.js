@@ -44,9 +44,9 @@ app.use(cookieParser());
 
 
 //配置代理
-if(config.proxyTarget &&config.proxyPrefix && config.proxyTarget!=""){
+if (config.proxyTarget && config.proxyPrefix && config.proxyTarget != "") {
   app.use(config.proxyPrefix, proxy({target: config.proxyTarget, changeOrigin: true}));
-  console.log('代理配置成功,代理uri:'+config.proxyPrefix+" 服务器: "+config.proxyTarget);
+  console.log("代理配置成功，服务器: " + config.proxyTarget + config.proxyPrefix);
 }
 
 
@@ -56,22 +56,19 @@ app.use('/node_modules', express.static(config.node_modulesPath));
 app.use('/static', express.static(config.staticPath));
 
 
-
 //手动载入路由
 // app.use('/', index);
 //app.use('/api/users', users);
 
 
-
-
 //自动载入路由
-function loadRoutes(){
-  return new Promise((resolve,reject) => {
+function loadRoutes() {
+  return new Promise((resolve, reject) => {
     glob(config.routePath, (err, files) => {
       if (err) {
         reject(err);
       }
-      files.forEach( (filePath) => {
+      files.forEach((filePath) => {
         const router = require(filePath).default;
 
         if (typeof router === 'function') {
@@ -106,8 +103,6 @@ loadRoutes()
       res.render('error.html');
     });
   })
-
-
 
 
 module.exports = app;

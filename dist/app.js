@@ -30,6 +30,10 @@ var _glob = require('glob');
 
 var _glob2 = _interopRequireDefault(_glob);
 
+var _httpProxyMiddleware = require('http-proxy-middleware');
+
+var _httpProxyMiddleware2 = _interopRequireDefault(_httpProxyMiddleware);
+
 var _index = require('./routes/index');
 
 var _index2 = _interopRequireDefault(_index);
@@ -72,6 +76,12 @@ app.use(_bodyParser2.default.urlencoded({ extended: false }));
 //配置cookie解析器
 app.use((0, _cookieParser2.default)());
 
+//配置代理
+if (_config2.default.proxyTarget && _config2.default.proxyPrefix && _config2.default.proxyTarget != "") {
+  app.use(_config2.default.proxyPrefix, (0, _httpProxyMiddleware2.default)({ target: _config2.default.proxyTarget, changeOrigin: true }));
+  console.log("代理配置成功，服务器: " + _config2.default.proxyTarget + _config2.default.proxyPrefix);
+}
+
 //配置静态资源目录
 app.use('/public', _express2.default.static(_config2.default.publicPath));
 app.use('/node_modules', _express2.default.static(_config2.default.node_modulesPath));
@@ -79,10 +89,10 @@ app.use('/static', _express2.default.static(_config2.default.staticPath));
 
 //手动载入路由
 // app.use('/', index);
-//  app.use('/api/users', users);
+//app.use('/api/users', users);
 
 
-// 自动载入路由
+//自动载入路由
 function loadRoutes() {
   return new Promise(function (resolve, reject) {
     (0, _glob2.default)(_config2.default.routePath, function (err, files) {
@@ -104,6 +114,7 @@ function loadRoutes() {
 }
 
 loadRoutes().then(function () {
+
   //配置404页面
   app.use(function (req, res, next) {
     var err = new Error('Not Found');
