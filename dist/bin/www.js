@@ -1,6 +1,12 @@
 #!/usr/bin/env node
 'use strict';
 
+var _config = require('../config');
+
+var _config2 = _interopRequireDefault(_config);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 /**
  * Module dependencies.
  */
@@ -13,7 +19,7 @@ var http = require('http');
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || _config2.default);
 app.set('port', port);
 
 /**

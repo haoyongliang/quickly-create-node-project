@@ -360,9 +360,132 @@ export default router;
 
 ### 5.错误处理
 + 在app.js中已经添加了错误处理中间件，只需要再程序中修改代码即可
-+ 以前错误直接throw err, 现在修改为next(err)即可
++ 以前错误直接throw err, 现在修改为return next(err)即可
++ 以controllers/users.js为例
+```javascript
+getAllUsers: function (req, res, next) {
+  readFile('xx',(err)=>{
+    if(err){
+      return next(err)
+    }
+  })
+}
+```
 
-### 6.最后添加一些可能用到的npm包
+### 6.让路由自动扫描摆脱手动配置的束缚
++ 1.安装glob
+```bash
+npm install --save glob
+```
++ 2.在config.js中添加路由目录
+```bash
+routePath: path.join(__dirname, 'routes/**/*.js');
+```
+
++ 3.在app.js钟引入glob,并且将之前写死的路由替换掉
+**注意：因为glob是异步的所以实用ES6的Promise语法，必须在加载完路由后才能加载404页面和错误页面，顺序不能乱**
++ 之前的
+```javascript
+//手动载入路由
+app.use('/', index);
+app.use('/api/users', users);
+```
++ 修改之后的
+```javascript
+function loadRoutes(){
+  return new Promise((resolve,reject) => {
+    glob(config.routePath, (err, files) => {
+      if (err) {
+        reject(err);
+      }
+      files.forEach( (filePath) => {
+        const router = require(filePath).default;
+
+        if (typeof router === 'function') {
+          app.use(router.prefix, router);
+          console.log('路由添加成功,路由信息:' + router.prefix);
+        }
+      });
+
+      resolve();
+    })
+  });
+}
+
+loadRoutes()
+  .then(() => {
+    //配置404页面
+    app.use((req, res, next) => {
+      var err = new Error('Not Found');
+      err.status = 404;
+      next(err);
+    });
+
+    //配置错误处理中间件，以前错误直接throw err, 现在修改为next(err)即可
+    app.use((err, req, res, next) => {
+      // set locals, only providing error in development
+      res.locals.message = err.message;
+      res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+      // render the error page
+      res.status(err.status || 500);
+      res.render('error.html');
+    });
+  })
+```
++ 4.修改routes目录下的所有路由: 给路由挂载访问前缀
++ 例如之前app.js中配置users路由是app.use('/api/users',users),前缀就是/api/users
++ 只需要在users.js钟创建完毕route对象后添加前缀就可以
+```javascript
+const router = express.Router();
+router.prefix = '/api/users';
+```
+
+
+### 7.服务器端口配置
++ 之前端口是写死在src/bin/www.js文件中的，现在将端口配置到config中
++ 1.在config.js中添加配置信息
+```javascript
+serverPort: "5000",
+```
++ 2.修改src/bin/www.js文件
+引入config
+```javascript
+import config from './../config'
+```
++ 修改代码var port = normalizePort(process.env.PORT || 3000);，修改为
+```javascript
+var port = normalizePort(process.env.PORT || config.serverPort);
+```
+
+### 8.添加express代理中间件
++ 1.安装http-proxy-middleware
+```bash
+npm install --save http-proxy-middleware
+```
++ 2.在config.js中添加,注意必须指定协议，我这里是http
+```bash
+  proxyPrefix:'/api',
+  proxyTarget:'http://127.0.0.1:3000',
+```
++ 3.修改app.js
+- 引入插件
+
+```bash
+import proxy from 'http-proxy-middleware';
+```
+- 添加中间件，越早引入越好，这样速度会比较快
+
+```bash
+if(config.proxyTarget &&config.proxyPrefix && config.proxyTarget!=""){
+  app.use(config.proxyPrefix, proxy({target: config.proxyTarget, changeOrigin: true}));
+  console.log('代理配置成功,代理uri:'+config.proxyPrefix+" 服务器: "+config.proxyTarget);
+}
+```
+
+
+
+### 9.最后添加一些可能用到的npm包
 1. formidable 图片上传
 2. validator node后端表单校验
 3. open node程序启动完毕，自动打开浏览器

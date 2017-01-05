@@ -1,7 +1,7 @@
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
-              value: true
+  value: true
 });
 
 var _express = require('express');
@@ -10,15 +10,17 @@ var _express2 = _interopRequireDefault(_express);
 
 var _users = require('../controllers/users');
 
-var handler = _interopRequireWildcard(_users);
-
-function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+var _users2 = _interopRequireDefault(_users);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var router = _express2.default.Router();
+router.prefix = '/api/users';
 
 /* GET users listing. */
-router.get('/add', handler.add);
+router.get('/users', _users2.default.getAllUsers);
+//router.post('/users/:id', handler.getAllUsers);
+//router.put('/users/:id', handler.getAllUsers);
+//router.delete('/user/:id', handler.getAllUsers);
 
 exports.default = router;

@@ -4,6 +4,7 @@ export default  {
 
   getAllUsers: function (req, res, next) {
     let data = []
+    console.log(111);
     User.findAll().then(function (result) {
       for (var i = 0, usr; usr = result[i++];) {
         data.push(usr);
