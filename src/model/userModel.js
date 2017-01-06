@@ -1,5 +1,6 @@
-import userMapper from './../mapper/User'
-export default class User{
+import userMapper from './../mapper/userMapper'
+
+export default class UserModel{
 	constructor(user){
     this.id = user.id;
 		this.name = user.name;
@@ -19,9 +20,10 @@ export default class User{
 	/*
 	 *静态方法
 	 */
-  static find(){
-
+  static findAll(){
+    return userMapper.sync()
+      .then(()=>{
+        return userMapper.findAll();
+      })
 	}
-
-
 }
