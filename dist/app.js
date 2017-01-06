@@ -89,31 +89,21 @@ app.use('/static', _express2.default.static(_config2.default.staticPath));
 
 //手动载入路由
 // app.use('/', index);
-//app.use('/api/users', users);
+// app.use('/api/users', users);
 
+//自动载入路由，glob是异步的，错误处理应该在路由加载完毕后加载
+(0, _glob2.default)(_config2.default.routePath, function (err, files) {
+  if (err) {
+    throw err;
+  }
+  files.forEach(function (filePath) {
+    var router = require(filePath).default;
 
-//自动载入路由
-function loadRoutes() {
-  return new Promise(function (resolve, reject) {
-    (0, _glob2.default)(_config2.default.routePath, function (err, files) {
-      if (err) {
-        reject(err);
-      }
-      files.forEach(function (filePath) {
-        var router = require(filePath).default;
-
-        if (typeof router === 'function') {
-          app.use(router.prefix, router);
-          console.log('路由添加成功,路由信息:' + router.prefix);
-        }
-      });
-
-      resolve();
-    });
+    if (typeof router === 'function') {
+      app.use(router.prefix, router);
+      console.log('路由添加成功,路由信息:' + router.prefix);
+    }
   });
-}
-
-loadRoutes().then(function () {
 
   //配置404页面
   app.use(function (req, res, next) {

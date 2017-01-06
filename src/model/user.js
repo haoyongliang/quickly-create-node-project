@@ -1,14 +1,19 @@
+import userMapper from './../mapper/User'
 export default class User{
 	constructor(user){
-		this.username = user.username;
+    this.id = user.id;
+		this.name = user.name;
 		this.password = user.password;
 	}
 
 	/*
 	普通方法
 	 */
-	save(fn){
-		fn();
+	save(){
+    return userMapper.sync()
+      .then(()=>{
+        return userMapper.create(this)
+      })
 	}
 
 	/*
