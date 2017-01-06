@@ -58,51 +58,42 @@ app.use('/static', express.static(config.staticPath));
 
 //手动载入路由
 // app.use('/', index);
-//app.use('/api/users', users);
+// app.use('/api/users', users);
 
+//自动载入路由，glob是异步的，错误处理应该在路由加载完毕后加载
+glob(config.routePath, (err, files) => {
+  if (err) {
+    throw err;
+  }
+  files.forEach((filePath) => {
+    const router = require(filePath).default;
 
-//自动载入路由
-function loadRoutes() {
-  return new Promise((resolve, reject) => {
-    glob(config.routePath, (err, files) => {
-      if (err) {
-        reject(err);
-      }
-      files.forEach((filePath) => {
-        const router = require(filePath).default;
-
-        if (typeof router === 'function') {
-          app.use(router.prefix, router);
-          console.log('路由添加成功,路由信息:' + router.prefix);
-        }
-      });
-
-      resolve();
-    })
+    if (typeof router === 'function') {
+      app.use(router.prefix, router);
+      console.log('路由添加成功,路由信息:' + router.prefix);
+    }
   });
-}
 
-loadRoutes()
-  .then(() => {
 
-    //配置404页面
-    app.use((req, res, next) => {
-      var err = new Error('Not Found');
-      err.status = 404;
-      next(err);
-    });
+  //配置404页面
+  app.use((req, res, next) => {
+    var err = new Error('Not Found');
+    err.status = 404;
+    next(err);
+  });
 
-    //配置错误处理中间件，以前错误直接throw err, 现在修改为next(err)即可
-    app.use((err, req, res, next) => {
-      // set locals, only providing error in development
-      res.locals.message = err.message;
-      res.locals.error = req.app.get('env') === 'development' ? err : {};
+//配置错误处理中间件，以前错误直接throw err, 现在修改为next(err)即可
+  app.use((err, req, res, next) => {
+    // set locals, only providing error in development
+    res.locals.message = err.message;
+    res.locals.error = req.app.get('env') === 'development' ? err : {};
 
-      // render the error page
-      res.status(err.status || 500);
-      res.render('error.html');
-    });
-  })
+    // render the error page
+    res.status(err.status || 500);
+    res.render('error.html');
+  });
+
+})
 
 
 module.exports = app;
