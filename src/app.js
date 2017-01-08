@@ -1,20 +1,27 @@
 import express from 'express';
 import {join} from 'path';
 import favicon from 'serve-favicon';
-import logger from 'morgan';
+// import logger from 'morgan';
 import cookieParser  from 'cookie-parser';
 import bodyParser from 'body-parser';
 import nunjucks from 'nunjucks';
 import glob from 'glob';
 import proxy from 'http-proxy-middleware';
+import log4js from 'log4js';
+
 
 import index from './routes/index';
 import users from './routes/users';
 import config from './config';
+import  logger from './logger';
+
 
 
 const app = express();
 
+
+//配置日志
+app.use(log4js.connectLogger(logger, {level:'auto', format: ':method :url'}));
 
 // 配置 NunJucks 模板引擎
 nunjucks.configure(config.viewPath, {
@@ -25,10 +32,13 @@ nunjucks.configure(config.viewPath, {
 })
 
 //配置网站favicon.ico图标,所在目录/public/images/favicon.ico
-//app.use(favicon(join(__dirname, 'public', 'images', 'favicon.ico')));
+try{
+  app.use(favicon(join(__dirname, './../public/images', 'favicon.ico')));
+  logger.debug("加载图标成功");
+}catch(err){
+  logger.error("网站图片配置失败，错误信息: "+err.message);
+}
 
-//配置日志
-app.use(logger('dev'));
 
 /*
  配置post请求体解析器
@@ -43,10 +53,11 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 
 
+
 //配置代理
 if (config.proxyTarget && config.proxyPrefix && config.proxyTarget != "") {
   app.use(config.proxyPrefix, proxy({target: config.proxyTarget, changeOrigin: true}));
-  console.log("代理配置成功，服务器: " + config.proxyTarget + config.proxyPrefix);
+  logger.info("代理配置成功，服务器: " + config.proxyTarget + config.proxyPrefix);
 }
 
 
@@ -60,21 +71,25 @@ app.use('/static', express.static(config.staticPath));
 // app.use('/', index);
 // app.use('/api/users', users);
 
+
 //自动载入路由，glob是异步的，错误处理应该在路由加载完毕后加载
-glob(config.routePath, (err, files) => {
-  if (err) {
-    throw err;
-  }
-  files.forEach((filePath) => {
-    const router = require(filePath).default;
-
-    if (typeof router === 'function') {
-      app.use(router.prefix, router);
-      console.log('路由添加成功,路由信息:' + router.prefix);
+new Promise((resolve, reject) => {
+  glob(config.routePath, (err, files) => {
+    if (err) {
+      logger.error('自动载入路由失败'+err.message);
     }
-  });
+    files.forEach((filePath) => {
+      const router = require(filePath).default;
 
-
+      if (typeof router === 'function') {
+        app.use(router.prefix, router);
+        logger.info('路由添加成功,路由前缀:' + router.prefix);
+      }
+    });
+    resolve();
+  })
+}).then(function () {
+  logger('app.js').info('自动载入路由成功');
   //配置404页面
   app.use((req, res, next) => {
     var err = new Error('Not Found');
@@ -92,8 +107,8 @@ glob(config.routePath, (err, files) => {
     res.status(err.status || 500);
     res.render('error.html');
   });
-
 })
+
 
 
 module.exports = app;

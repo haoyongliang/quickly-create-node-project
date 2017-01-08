@@ -383,7 +383,7 @@ routePath: path.join(__dirname, 'routes/**/*.js');
 ```
 
 + 3.在app.js钟引入glob,并且将之前写死的路由替换掉
-**注意：因为glob是异步的所以实用ES6的Promise语法，必须在加载完路由后才能加载404页面和错误页面，顺序不能乱**
+**注意：因为glob是异步，必须在加载完路由后才能加载404页面和错误页面，顺序不能乱这里使用ES6的Promise语法**
 + 之前的
 ```javascript
 //手动载入路由
@@ -393,20 +393,23 @@ app.use('/api/users', users);
 + 修改之后的
 ```javascript
 //自动载入路由，glob是异步的，错误处理应该在路由加载完毕后加载
-glob(config.routePath, (err, files) => {
-  if (err) {
-    throw err;
-  }
-  files.forEach((filePath) => {
-    const router = require(filePath).default;
-
-    if (typeof router === 'function') {
-      app.use(router.prefix, router);
-      console.log('路由添加成功,路由信息:' + router.prefix);
+new Promise((resolve, reject) => {
+  glob(config.routePath, (err, files) => {
+    if (err) {
+      logger.error('自动载入路由失败'+err.message);
     }
-  });
+    files.forEach((filePath) => {
+      const router = require(filePath).default;
 
-
+      if (typeof router === 'function') {
+        app.use(router.prefix, router);
+        logger.info('路由添加成功,路由前缀:' + router.prefix);
+      }
+    });
+    resolve();
+  })
+}).then(function () {
+  logger('app.js').info('自动载入路由成功');
   //配置404页面
   app.use((req, res, next) => {
     var err = new Error('Not Found');
@@ -424,7 +427,6 @@ glob(config.routePath, (err, files) => {
     res.status(err.status || 500);
     res.render('error.html');
   });
-
 })
 ```
 + 4.修改routes目录下的所有路由: 给路由挂载访问前缀
@@ -478,8 +480,70 @@ if(config.proxyTarget &&config.proxyPrefix && config.proxyTarget!=""){
 ```
 
 
+### 9.添加日志
++ express默认使用的是morgan,这里替换成log4js
++ 1.安装log4js npm install --save log4js
++ 2.在src目录添加logger.js文件，内容如下
+```javascript
+import log4js from 'log4js'
 
-### 9.最后添加一些可能用到的npm包
+log4js.configure({
+
+  appenders: [
+    {
+      type: 'console',
+      category: "console"
+
+    }, //控制台输出
+    {
+      type: "file",
+      filename: 'logs/log.log',
+      pattern: "_yyyy-MM-dd",
+      maxLogSize: 20480,
+      backups: 3,
+      category: 'dateFileLog'
+
+    }//日期文件格式
+  ],
+  replaceConsole: true,   //替换console.log
+  levels:{
+    dateFileLog: 'debug',
+    console: 'debug'
+  }
+});
+
+
+const dateFileLog = log4js.getLogger('dateFileLog');
+const consoleLog = log4js.getLogger('console');
+export default   dateFileLog;//生产环境
+// export default consoleLog;//开发环境
+
+```
+
++ 3.在app.js中配置中间件
+```bash
+import log4js from 'log4js';
+//配置日志
+app.use(log4js.connectLogger(logger, {level:'auto', format: ':method :url'}));
+```
++ 4.在某个js中使用日志记录功能,比如app.js
+```javascript
+//引入刚才新建的logger.js
+import  logger from './logger';
+
+//调用logger.trace, debug, info, warn, error, fatal 方法
+ logger.debug("加载图标成功");
+ logger.error("失败");
+```
++ 5.在开发环境和生产环境中改变log的输出
+  - 开发环境输出到控制台,logger.js中用export default dateFileLog;
+  - 生产环境输出到文件，logger.js中用export default consoleLog;
++ 6.修改supervisor 启动设置
+  - 因为我们的supervisor监控项目，只要有文件发生改变就回重启，而日志会不停的向文件中写入，这个时候要忽略日志文件
+  修改启动项 supervisor -i logs,README.MD,node_modules  ./index
+
+
+### 10.最后添加一些可能用到的npm包
 1. formidable 图片上传
 2. validator node后端表单校验
 3. open node程序启动完毕，自动打开浏览器

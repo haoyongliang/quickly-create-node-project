@@ -4,31 +4,30 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _user = require('../mapper/user');
+var _userMapper = require('../mapper/userMapper');
 
-var _user2 = _interopRequireDefault(_user);
+var _userMapper2 = _interopRequireDefault(_userMapper);
+
+var _logger = require('../logger');
+
+var _logger2 = _interopRequireDefault(_logger);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var logger = (0, _logger2.default)('users');
 
 exports.default = {
 
   getAllUsers: function getAllUsers(req, res, next) {
-    var data = [];
-    console.log(111);
-    _user2.default.findAll().then(function (result) {
-      for (var i = 0, usr; usr = result[i++];) {
-        data.push(usr);
-        console.log('nae=' + usr.user_name + ', password=' + usr.user_password);
-      }
+    logger.debug('This is getAllUsers');
+    console.log('This is getAllUsers');
+    var data = [1, 2, 3];
 
-      res.json({
-        success: true,
-        result: {
-          list: data
-        }
-      });
-    }).then(function (err) {
-      throw err;
+    res.json({
+      success: true,
+      result: {
+        list: data
+      }
     });
   }
 };

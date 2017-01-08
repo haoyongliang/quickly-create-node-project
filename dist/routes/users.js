@@ -15,7 +15,7 @@ var _users2 = _interopRequireDefault(_users);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var router = _express2.default.Router();
-router.prefix = '/api/users';
+router.prefix = '/users';
 
 /* GET users listing. */
 router.get('/users', _users2.default.getAllUsers);

@@ -1,15 +1,12 @@
-import User from '../mapper/user'
+import User from '../mapper/userMapper'
+import logger from '../logger';
 
-export default  {
+
+  export default  {
 
   getAllUsers: function (req, res, next) {
-    let data = []
-    console.log(111);
-    User.findAll().then(function (result) {
-      for (var i = 0, usr; usr = result[i++];) {
-        data.push(usr);
-        console.log('nae=' + usr.user_name + ', password=' + usr.user_password);
-      }
+    logger.debug('This is getAllUsers');
+    let data = [1,2,3]
 
       res.json({
         success:true,
@@ -18,9 +15,6 @@ export default  {
         }
       });
 
-    }).then(function (err) {
-      throw   err
-    })
 
   }
 }

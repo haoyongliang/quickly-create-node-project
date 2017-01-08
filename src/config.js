@@ -7,7 +7,7 @@ export default   {
   node_modulesPath:join(__dirname,'./../node_modules'),
   routePath: join(__dirname, 'routes/**/*.js'),
 
-  serverPort: "5000",
+  serverPort: "4000",
 
   proxyPrefix:'/api',
   proxyTarget:'http://127.0.0.1:3000',
