@@ -542,8 +542,20 @@ import  logger from './logger';
   - 因为我们的supervisor监控项目，只要有文件发生改变就回重启，而日志会不停的向文件中写入，这个时候要忽略日志文件
   修改启动项 supervisor -i logs,README.MD,node_modules  ./index
 
+### 10.配置sesssion
++ 1.安装npm install --save express-session
++ 2.在app.js钟添加中间件
+```bash
+//配置session
+app.use(session({
+  secret: config.sessionSecret,
+  cookie: {maxAge: 80000 },  //设置maxAge是80000ms，即80s后session和相应的cookie失效过期
+  resave: false,
+  saveUninitialized: true,
+}));
+```
 
-### 10.最后添加一些可能用到的npm包
+### 11.最后添加一些可能用到的npm包
 1. formidable 图片上传
 2. validator node后端表单校验
 3. open node程序启动完毕，自动打开浏览器
@@ -552,4 +564,5 @@ import  logger from './logger';
 6. glob 文件搜索用到，可递归搜索
 7. moment.js 时间处理 moment().format();
 8. art-template
+9. got
 

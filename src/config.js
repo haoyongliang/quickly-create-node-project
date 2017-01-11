@@ -12,10 +12,14 @@ export default   {
   proxyPrefix:'/api',
   proxyTarget:'http://127.0.0.1:3000',
 
+  sessionSecret: "qsxcffghjewrkjalsdkfjlaksjdfljsdlf",
+
   DB_HOST:"127.0.0.1",
   DB_USER:"root",
   DB_PASSWORD:"root",
   DB_DATABASE:"dbname",
   DB_PORT:"3306",
-  DB_DIALECT : "mysql"
+  DB_DIALECT : "mysql",
+
+
 }

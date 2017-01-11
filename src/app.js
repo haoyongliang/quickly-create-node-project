@@ -8,7 +8,7 @@ import nunjucks from 'nunjucks';
 import glob from 'glob';
 import proxy from 'http-proxy-middleware';
 import log4js from 'log4js';
-
+import  session from 'express-session'
 
 import index from './routes/index';
 import users from './routes/users';
@@ -52,6 +52,13 @@ app.use(bodyParser.urlencoded({extended: false}));
 //配置cookie解析器
 app.use(cookieParser());
 
+//配置session
+app.use(session({
+  secret: config.sessionSecret,
+  cookie: {maxAge: 80000 },  //设置maxAge是80000ms，即80s后session和相应的cookie失效过期
+  resave: false,
+  saveUninitialized: true,
+}));
 
 
 //配置代理
